@@ -1,0 +1,32 @@
+name: manage-azure-policy-849114bd
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'policies/Storage_accounts_should_use_customer-managed_key_for_encryption_6fac406b-40ca-413b-bf8e-0bf964659c25/**'
+#      - .github/workflows/manage-azure-policy-849114bd.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_849114bd}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          policies/Storage_accounts_should_use_customer-managed_key_for_encryption_6fac406b-40ca-413b-bf8e-0bf964659c25/**
